@@ -62,6 +62,20 @@ class Database {
         const result = await this.coll.deleteMany(query);
         console.log('Removed ' + result.deletedCount + ' occurences of entry ' + word);
     }
+
+    async findWord(word) {
+        if (!this.isConnected) {
+            await this.connect();
+        }
+        const query = {
+            word: word
+        } 
+        const result = await this.coll.findOne(query);
+        if (result !== null) {
+            console.log('Found: ' + result.word + ', definition: ' + result.def);   
+        }     
+        return result;  
+    }
 }
 
 async function main() {
@@ -75,15 +89,17 @@ async function main() {
 //main();
 
 
-app.get('/:word', (req, res) => {
+app.get('/:word', async (req, res) => {
     const routeParams = req.params;
     const word = routeParams.word;
-    res.json(word);
+    const result = await myDb.findWord(word);
+    console.log("Result: " + result);
+    res.json(result);
 });
 
-
 const PORT = process.env.PORT || 3000;
+const myDb = new Database(MONGO_URL);
 
 app.listen(PORT, function () {
-  console.log('Server listening on port ' + PORT);
+    console.log('Server listening on port ' + PORT);
 });
