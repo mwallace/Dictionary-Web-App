@@ -25,9 +25,15 @@ class Database {
             word: word,
             def: def
         };
-        this.coll.insertOne(doc, function(err, result) {
-            console.log('Document id: ' + result.insertId);
-        });
+        try {
+            this.coll.updateOne(
+                { 'word': word },
+                { $set: doc },
+                { upsert: true }
+            )
+        } catch (e) {
+            console.log(e);
+        }
     }
 
     async printAll() {
@@ -55,9 +61,9 @@ class Database {
 
 async function main() {
     const myDb = new Database(MONGO_URL);
-    myDb.insertWord('new', 'new');
-    myDb.printAll();
-    myDb.deleteWords('new');
+    myDb.insertWord('new', 'foo');
+    myDb.insertWord('new', 'bar');
+    myDb.insertWord('new', 'baz');
     myDb.printAll();
 }
 
