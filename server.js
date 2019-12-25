@@ -6,6 +6,8 @@ const MONGO_URL = 'mongodb://localhost:27017/' + DATABASE_NAME;
 const express = require('express');
 const app = express();
 
+app.use(express.static('public'));
+
 class Database {
     constructor(url) {
         this.url = url;
@@ -72,9 +74,11 @@ async function main() {
 
 //main();
 
+/*
 app.get('/', (req, res) => {
     res.send('Jello World!\n');
 });
+*/
 
 const PORT = process.env.PORT || 3000;
 
