@@ -74,11 +74,13 @@ async function main() {
 
 //main();
 
-/*
-app.get('/', (req, res) => {
-    res.send('Jello World!\n');
+
+app.get('/:word', (req, res) => {
+    const routeParams = req.params;
+    const word = routeParams.word;
+    res.json(word);
 });
-*/
+
 
 const PORT = process.env.PORT || 3000;
 

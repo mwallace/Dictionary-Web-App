@@ -4,9 +4,8 @@ form.addEventListener('submit', submitLookup);
 async function submitLookup(event) {
     event.preventDefault();
     const text = document.querySelector('#query-input');
-    const word = text.value.trim();
+    const word = encodeURIComponent(text.value.trim());
     const response = await fetch(word);
-    if (response.status >= 400) {
-        console.log(response.statusText);
-    }
+    const json = await response.json();
+    console.log(json);
 }
