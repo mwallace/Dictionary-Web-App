@@ -30,8 +30,9 @@ class Database {
             word: word,
             def: def
         };
+        let result = null;
         try {
-            this.coll.updateOne(
+            result = this.coll.updateOne(
                 { 'word': word },
                 { $set: doc },
                 { upsert: true }
@@ -39,6 +40,7 @@ class Database {
         } catch (e) {
             console.log(e);
         }
+        return result;
     }
 
     async printAll() {
@@ -93,8 +95,24 @@ app.get('/:word', async (req, res) => {
     const routeParams = req.params;
     const word = routeParams.word;
     const result = await myDb.findWord(word);
-    console.log("Result: " + result);
     res.json(result);
+});
+
+app.post('/:word', async (req, res) => {
+    let data = '';
+	req.setEncoding('utf8');
+	req.on('data', (chunk) => {
+		data += chunk;
+    });
+    req.on('end', async () => {
+        const body = JSON.parse(data);
+        const word = body.word;
+        const definition = body.definition;
+        const result = await myDb.insertWord(word, definition);
+        const isOkay = result ? true : false;
+        myDb.printAll();
+        res.send({OK: isOkay});
+    });
 });
 
 const PORT = process.env.PORT || 3000;
