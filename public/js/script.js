@@ -4,14 +4,18 @@ formLookup.addEventListener('submit', submitLookup);
 const newEntry = document.querySelector('#new-entry');
 newEntry.addEventListener('submit', submitNewEntry);
 
+// Fetches a definition for a given word. If no definition is found,
+// the interface is altered allowing the user to submit a new definition.
 async function submitLookup(event) {
     event.preventDefault();
     const text = document.querySelector('#query-input-word');
     const word = encodeURIComponent(text.value.trim());
     const response = await fetch(word);
     const json = await response.json();
+    // Check the response from the server
     if (json !== null) {
         if (json.def !== null) {
+            // Valid definition received, so alter the webpage to display it
             console.log(json.def);
             const def = document.querySelector('#def');
             def.classList.remove('hidden');
@@ -19,6 +23,8 @@ async function submitLookup(event) {
             definition.innerHTML = json.def;
         } 
     } else {
+        // No valid definition received. Alter webpage to display definition 
+        // entry form.
         formLookup.classList.add('hidden');
         const def = document.querySelector('#def');
         def.classList.add('hidden');      
@@ -26,6 +32,7 @@ async function submitLookup(event) {
     }
 }
 
+// Submits a definition for a given word.
 async function submitNewEntry(event) {
     event.preventDefault();
     const textDef = document.querySelector('#query-input-def');
@@ -47,7 +54,11 @@ async function submitNewEntry(event) {
   
     const response = await fetch(word, fetchOptions); 
     const json = await response.json();
-    if (json.OK) {
+    // Check response from server
+    if (json !== null && json.OK) {
+        // Definition successfully added to database. Alter UI so that
+        // only the word and definition are displayed (same as if a simple
+        // lookup succeeded).
         newEntry.classList.add('hidden');
         formLookup.classList.remove('hidden');
         const text = document.querySelector('#query-input-word');
@@ -56,5 +67,4 @@ async function submitNewEntry(event) {
         definition.classList.remove('hidden');
         definition.querySelector('#definition').innerHTML = def;
     }
-
 }

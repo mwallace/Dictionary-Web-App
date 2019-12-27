@@ -8,6 +8,8 @@ const app = express();
 
 app.use(express.static('public'));
 
+// Database handles connecting to a MongDB database and manages data in the
+// form of word:definition pairs.
 class Database {
     constructor(url) {
         this.url = url;
@@ -22,6 +24,8 @@ class Database {
         this.isConnected = true;
     }
 
+    // Inserts a word:def pair if it word is not present in database.
+    // Updates existing definition if word is present.
     async insertWord(word, def) {
         if (!this.isConnected) {
             await this.connect();
@@ -43,6 +47,7 @@ class Database {
         return result;
     }
 
+    // For debug purposes: Prints out entire database
     async printAll() {
         if (!this.isConnected) {
             await this.connect();
@@ -54,6 +59,7 @@ class Database {
         }
     }
 
+    // Clears out entry based on word provided.
     async deleteWords(word) {
         if (!this.isConnected) {
             await this.connect();
@@ -65,6 +71,7 @@ class Database {
         console.log('Removed ' + result.deletedCount + ' occurences of entry ' + word);
     }
 
+    // Looks up a word
     async findWord(word) {
         if (!this.isConnected) {
             await this.connect();
@@ -80,6 +87,7 @@ class Database {
     }
 }
 
+// Path for looking up a definition, given a word
 app.get('/:word', async (req, res) => {
     const routeParams = req.params;
     const word = routeParams.word;
@@ -88,6 +96,7 @@ app.get('/:word', async (req, res) => {
     res.json({OK: isOkay});
 });
 
+// Path for providing a definition, given a word
 app.post('/:word', async (req, res) => {
     let data = '';
 	req.setEncoding('utf8');
@@ -104,6 +113,7 @@ app.post('/:word', async (req, res) => {
     });
 });
 
+// Basic stuff for getting server up and initializing db object
 const PORT = process.env.PORT || 3000;
 const myDb = new Database(MONGO_URL);
 
