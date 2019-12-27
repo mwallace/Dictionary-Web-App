@@ -95,7 +95,8 @@ app.get('/:word', async (req, res) => {
     const routeParams = req.params;
     const word = routeParams.word;
     const result = await myDb.findWord(word);
-    res.json(result);
+    const isOkay = result ? true : false;
+    res.json({OK: isOkay});
 });
 
 app.post('/:word', async (req, res) => {
