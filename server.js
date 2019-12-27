@@ -80,17 +80,6 @@ class Database {
     }
 }
 
-async function main() {
-    const myDb = new Database(MONGO_URL);
-    myDb.insertWord('new', 'foo');
-    myDb.insertWord('new', 'bar');
-    myDb.insertWord('new', 'baz');
-    myDb.printAll();
-}
-
-//main();
-
-
 app.get('/:word', async (req, res) => {
     const routeParams = req.params;
     const word = routeParams.word;
@@ -111,7 +100,6 @@ app.post('/:word', async (req, res) => {
         const definition = body.definition;
         const result = await myDb.insertWord(word, definition);
         const isOkay = result ? true : false;
-        myDb.printAll();
         res.send({OK: isOkay});
     });
 });
