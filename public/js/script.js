@@ -20,7 +20,7 @@ async function submitLookup(event) {
             const def = document.querySelector('#def');
             def.classList.remove('hidden');
             const definition = def.querySelector('#definition');
-            definition.innerHTML = json.def;
+            definition.innerHTML =  json ? json.def : '';
         } 
     } else {
         // No valid definition received. Alter webpage to display definition 
@@ -36,9 +36,9 @@ async function submitLookup(event) {
 async function submitNewEntry(event) {
     event.preventDefault();
     const textDef = document.querySelector('#query-input-def');
-    const def = encodeURIComponent(textDef.value.trim());
+    const def = textDef.value.trim();
     const textWord = document.querySelector('#query-input-word');
-    const word = encodeURIComponent(textWord.value.trim());
+    const word = textWord.value.trim();
     const msg = {
         word: word,
         definition: def
@@ -55,7 +55,7 @@ async function submitNewEntry(event) {
     const response = await fetch(word, fetchOptions); 
     const json = await response.json();
     // Check response from server
-    if (json !== null && json.OK) {
+    if (json !== null) {
         // Definition successfully added to database. Alter UI so that
         // only the word and definition are displayed (same as if a simple
         // lookup succeeded).
@@ -65,6 +65,6 @@ async function submitNewEntry(event) {
         text.textContent = word;
         const definition = document.querySelector('#def');
         definition.classList.remove('hidden');
-        definition.querySelector('#definition').innerHTML = def;
+        definition.querySelector('#definition').innerHTML = json ? json.def : '';
     }
 }

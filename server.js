@@ -106,9 +106,14 @@ app.post('/:word', async (req, res) => {
         const body = JSON.parse(data);
         const word = body.word;
         const definition = body.definition;
-        const result = await myDb.insertWord(word, definition);
-        const isOkay = result ? true : false;
-        res.send({OK: isOkay});
+        const insertResult = await myDb.insertWord(word, definition);
+        if (insertResult) {
+            const findResult = await myDb.findWord(word);
+            res.json(findResult);
+        } else {
+            res.send(null);
+        }
+
     });
 });
 
