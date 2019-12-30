@@ -92,8 +92,7 @@ app.get('/:word', async (req, res) => {
     const routeParams = req.params;
     const word = routeParams.word;
     const result = await myDb.findWord(word);
-    const isOkay = result ? true : false;
-    res.json({OK: isOkay});
+    res.json(result);
 });
 
 // Path for providing a definition, given a word
