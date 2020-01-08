@@ -117,9 +117,15 @@ app.post('/:word', async (req, res) => {
     });
 });
 
+// All other routes
+app.all('*', (req, res) => {
+    res.redirect('/');
+});
+
 // Basic stuff for getting server up and initializing db object
 const PORT = process.env.PORT || 3000;
 const myDb = new Database(MONGO_URL);
+const path = require('path');
 
 app.listen(PORT, function () {
     console.log('Server listening on port ' + PORT);
