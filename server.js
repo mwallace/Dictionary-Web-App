@@ -1,9 +1,13 @@
+// Database stuff
 const DATABASE_NAME = 'eng-dict';
 const MONGO_URL = 'mongodb://localhost:27017/' + DATABASE_NAME;
-
+const Database = require('./modules/database');
+const myDb = new Database(MONGO_URL);
+// Server stuff
+const PORT = process.env.PORT || 3000;
+// Express stuff
 const express = require('express');
 const app = express();
-
 app.use(express.static('public'));
 
 // Path for looking up a definition, given a word
@@ -32,7 +36,6 @@ app.post('/:word', async (req, res) => {
         } else {
             res.send(null);
         }
-
     });
 });
 
@@ -40,11 +43,6 @@ app.post('/:word', async (req, res) => {
 app.all('*', (req, res) => {
     res.redirect('/');
 });
-
-// Basic stuff for getting server up and initializing db object
-const PORT = process.env.PORT || 3000;
-const Database = require('./modules/database');
-const myDb = new Database(MONGO_URL);
 
 app.listen(PORT, function () {
     console.log('Server listening on port ' + PORT);
