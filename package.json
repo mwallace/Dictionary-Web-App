@@ -4,7 +4,7 @@
   "description": "Simple dictionary web app using MongoDB on backend",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "mocha",
     "start": "node server.js"
   },
   "author": "Mike Wallace",
@@ -13,5 +13,20 @@
     "express": "^4.17.1",
     "mongodb": "^3.4.1"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "mocha": "^7.0.0",
+    "request": "^2.88.0"
+  },
+  "directories": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mwallace/Dictionary-Web-App.git"
+  },
+  "bugs": {
+    "url": "https://github.com/mwallace/Dictionary-Web-App/issues"
+  },
+  "homepage": "https://github.com/mwallace/Dictionary-Web-App#readme"
 }

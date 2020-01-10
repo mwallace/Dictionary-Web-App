@@ -44,6 +44,14 @@ app.all('*', (req, res) => {
     res.redirect('/');
 });
 
-app.listen(PORT, function () {
+let server = app.listen(PORT, function () {
     console.log('Server listening on port ' + PORT);
 });
+
+function stop() {
+    server.close();
+}
+
+module.exports = server;
+module.exports.stop = stop;
+module.exports.port = PORT;
