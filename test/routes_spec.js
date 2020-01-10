@@ -24,9 +24,10 @@ describe('server', function () {
     });
 
     it('Known Definition Lookup', function(done) {
-        request(URL + '/test', function(error, response, body) {
+        request(URL + '/test', async function(error, response, body) {
             expect(response.statusCode).to.equal(200);
-            expect(body).to.equal(`{"_id":"5e0a8098f41fa3b28177372e","word":"test","def":"test%20definition"}`);
+            const json = JSON.parse(body);
+            expect(json.def).to.equal("test%20definition");
             done();
         });
     });
