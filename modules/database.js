@@ -11,7 +11,7 @@ class Database {
     }
 
     async connect() {
-        this.db = await (await MongoClient.connect(this.url)).db(); 
+        this.db = await (await MongoClient.connect(this.url, {useUnifiedTopology: true})).db();
         this.coll = this.db.collection('test');
         this.isConnected = true;
     }
