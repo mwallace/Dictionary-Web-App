@@ -66,6 +66,8 @@ async function submitNewEntry(event) {
         formLookup.classList.remove('hidden');
         const text = document.querySelector('#query-input-word');
         text.textContent = word;
+        const notFound = document.querySelector('#notFound');
+        notFound.classList.add('hidden');
         const definition = document.querySelector('#def');
         definition.classList.remove('hidden');
         definition.querySelector('#definition').innerHTML = json ? json.def : '';
