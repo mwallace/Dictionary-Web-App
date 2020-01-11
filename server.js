@@ -39,6 +39,14 @@ app.post('/:word', async (req, res) => {
     });
 });
 
+// Path for deleting entry from database
+app.get('/delete/:word', async (req, res) => {
+    const routeParams = req.params;
+    const word = routeParams.word;
+    const result = await myDb.deleteAllInstancesOf(word);
+    res.json(result);
+});
+
 // All other routes
 app.all('*', (req, res) => {
     res.redirect('/');

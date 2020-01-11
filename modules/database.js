@@ -61,6 +61,7 @@ class Database {
         }
         const result = await this.coll.deleteMany(query);
         console.log('Removed ' + result.deletedCount + ' occurences of entry ' + word);
+        return result;
     }
 
     // Looks up a word
