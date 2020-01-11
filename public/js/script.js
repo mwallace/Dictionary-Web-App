@@ -6,7 +6,7 @@ newEntry.addEventListener('submit', submitNewEntry);
 
 // Dispatches appropriate function based on what the user selected from
 // drop-down menu
-function dispatchFormAction(event) {
+async function dispatchFormAction(event) {
     event.preventDefault();
     // Hide all stuff from previous interactions
     const notFound = document.querySelector('#notFound');
@@ -23,18 +23,20 @@ function dispatchFormAction(event) {
             onLookup();
             break;
         case 'Add':
-            // If a definition doesn't already exist, allow user to
-            // add one
-            if (!onLookup()) {
+            // If a definition doesn't already exist, allow user to add one
+            const lookupAdd = await onLookup();
+            if (!lookupAdd) {
                 newEntry.classList.remove('hidden');
             }
             break;
         case 'Delete':
+            onDelete();
             break;
         case 'Update':
-            // If word doesn't exist, let the user know they will be adding a new entry
+            // If word is found, let the user know they will be adding a new entry
             // rather than updating an old one.
-            if (onLookup()) {
+            const lookupUpdate = await onLookup();
+            if (!lookupUpdate) {
                 const addNewInstead = document.querySelector('#addNewInstead');
                 addNewInstead.classList.remove('hidden');
             }
@@ -46,6 +48,15 @@ function dispatchFormAction(event) {
     }
 }
 
+// Deletes all instances of word from database
+async function onDelete() {
+    const text = document.querySelector('#query-input-word');
+    const word = encodeURIComponent(text.value.trim());
+    const query = 'delete/' + word;
+    const response = await fetch(query);
+    const json = await response.json();
+}
+
 // Fetches a definition for a given word.
 async function onLookup() {
     const text = document.querySelector('#query-input-word');
@@ -53,15 +64,13 @@ async function onLookup() {
     const response = await fetch(word);
     const json = await response.json();
     // Check the response from the server
-    if (json !== null) {
-        if (json.def !== null) {
-            // Valid definition received, so alter the webpage to display it
-            const def = document.querySelector('#def');
-            def.classList.remove('hidden');
-            const definition = def.querySelector('#definition');
-            definition.innerHTML =  json ? json.def : '';
-            return true;
-        } 
+    if (json !== null && json.def !== null) {
+        // Valid definition received, so alter the webpage to display it
+        const def = document.querySelector('#def');
+        def.classList.remove('hidden');
+        const definition = def.querySelector('#definition');
+        definition.innerHTML =  json ? json.def : '';
+        return true;
     } else {
         // No valid definition received. Show error message that no definition exists
         const def = document.querySelector('#def');
@@ -109,4 +118,7 @@ async function submitNewEntry(event) {
         definition.classList.remove('hidden');
         definition.querySelector('#definition').innerHTML = json ? json.def : '';
     }
+    // Hide new entry notice, if it isn't already hidden
+    const addNewInstead = document.querySelector('#addNewInstead');
+    addNewInstead.classList.add('hidden');
 }
