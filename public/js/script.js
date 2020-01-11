@@ -8,9 +8,12 @@ newEntry.addEventListener('submit', submitNewEntry);
 // drop-down menu
 function dispatchFormAction(event) {
     event.preventDefault();
-    // Enforce hiding of not found error message
+    // Hide all stuff from previous interactions
     const notFound = document.querySelector('#notFound');
+    const addNewInstead = document.querySelector('#addNewInstead');
+    addNewInstead.classList.add('hidden');
     notFound.classList.add('hidden');
+    newEntry.classList.add('hidden');
     // Find out what option was selected from drop-down box
     const action = document.querySelector("#action");
     const i = action.selectedIndex;
@@ -20,10 +23,23 @@ function dispatchFormAction(event) {
             onLookup();
             break;
         case 'Add':
+            // If a definition doesn't already exist, allow user to
+            // add one
+            if (!onLookup()) {
+                newEntry.classList.remove('hidden');
+            }
             break;
         case 'Delete':
             break;
         case 'Update':
+            // If word doesn't exist, let the user know they will be adding a new entry
+            // rather than updating an old one.
+            if (onLookup()) {
+                const addNewInstead = document.querySelector('#addNewInstead');
+                addNewInstead.classList.remove('hidden');
+            }
+            // Allow user to add a defintion. Will overwrite existing definition.
+            newEntry.classList.remove('hidden');
             break;
         default:
             break;
@@ -40,11 +56,11 @@ async function onLookup() {
     if (json !== null) {
         if (json.def !== null) {
             // Valid definition received, so alter the webpage to display it
-            console.log(json.def);
             const def = document.querySelector('#def');
             def.classList.remove('hidden');
             const definition = def.querySelector('#definition');
             definition.innerHTML =  json ? json.def : '';
+            return true;
         } 
     } else {
         // No valid definition received. Show error message that no definition exists
@@ -52,6 +68,7 @@ async function onLookup() {
         def.classList.add('hidden');
         const notFound = document.querySelector('#notFound');
         notFound.classList.remove('hidden');
+        return false;
     }
 }
 
