@@ -2,7 +2,7 @@ const formLookup = document.querySelector('#lookup');
 formLookup.addEventListener('submit', dispatchFormAction);
 
 const newEntry = document.querySelector('#new-entry');
-newEntry.addEventListener('submit', submitNewEntry);
+newEntry.addEventListener('submit', onUpsert);
 
 // Dispatches appropriate function based on what the user selected from
 // drop-down menu
@@ -82,7 +82,7 @@ async function onLookup() {
 }
 
 // Submits a definition for a given word.
-async function submitNewEntry(event) {
+async function onUpsert(event) {
     event.preventDefault();
     const textDef = document.querySelector('#query-input-def');
     const def = textDef.value.trim();
@@ -100,8 +100,8 @@ async function submitNewEntry(event) {
         },
         body: JSON.stringify(msg)
     };
-  
-    const response = await fetch(word, fetchOptions); 
+    const query = 'upsert/' + word;
+    const response = await fetch(query, fetchOptions); 
     const json = await response.json();
     // Check response from server
     if (json !== null) {
