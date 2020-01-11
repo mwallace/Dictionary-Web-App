@@ -27,7 +27,10 @@ async function submitLookup(event) {
         // entry form.
         formLookup.classList.add('hidden');
         const def = document.querySelector('#def');
-        def.classList.add('hidden');      
+        def.classList.add('hidden');
+        const notFound = document.querySelector('#notFound');
+        notFound.classList.remove('hidden');
+        const newEntry = document.querySelector('#new-entry');
         newEntry.classList.remove('hidden');
     }
 }

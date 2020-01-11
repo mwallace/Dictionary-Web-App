@@ -6,16 +6,19 @@
     <body>
         <h1>Dictionary</h1>
         <form id="lookup">
-            Lookup a Word<br>
+            Enter a Word<br>
             <input type="text" name="word" id="query-input-word"><br>
-            <input type="submit" value="Submit">
+            <input type="submit" value="Lookup Word">
         </form>
+        <div id="notFound" class="hidden">
+            <p>Sorry, that word was not found.</p>
+        </div>
         <div id="def" class="hidden">
             <h1>Definition</h1>
             <div id="definition"></div>
         </div>
         <form id="new-entry" class="hidden">
-            That word doesn't exist. Add a definition<br>
+            Enter a definition<br>
             <input type="text" name="def" id="query-input-def"><br>
             <input type="submit" value="Submit">
         </form>
