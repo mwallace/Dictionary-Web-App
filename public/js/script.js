@@ -1,13 +1,37 @@
 const formLookup = document.querySelector('#lookup');
-formLookup.addEventListener('submit', submitLookup);
+formLookup.addEventListener('submit', dispatchFormAction);
 
 const newEntry = document.querySelector('#new-entry');
 newEntry.addEventListener('submit', submitNewEntry);
 
-// Fetches a definition for a given word. If no definition is found,
-// the interface is altered allowing the user to submit a new definition.
-async function submitLookup(event) {
+// Dispatches appropriate function based on what the user selected from
+// drop-down menu
+function dispatchFormAction(event) {
     event.preventDefault();
+    // Enforce hiding of not found error message
+    const notFound = document.querySelector('#notFound');
+    notFound.classList.add('hidden');
+    // Find out what option was selected from drop-down box
+    const action = document.querySelector("#action");
+    const i = action.selectedIndex;
+    // Switch to appropriate function
+    switch(action.options[i].text) {
+        case 'Lookup':
+            onLookup();
+            break;
+        case 'Add':
+            break;
+        case 'Delete':
+            break;
+        case 'Update':
+            break;
+        default:
+            break;
+    }
+}
+
+// Fetches a definition for a given word.
+async function onLookup() {
     const text = document.querySelector('#query-input-word');
     const word = encodeURIComponent(text.value.trim());
     const response = await fetch(word);
@@ -23,15 +47,11 @@ async function submitLookup(event) {
             definition.innerHTML =  json ? json.def : '';
         } 
     } else {
-        // No valid definition received. Alter webpage to display definition 
-        // entry form.
-        formLookup.classList.add('hidden');
+        // No valid definition received. Show error message that no definition exists
         const def = document.querySelector('#def');
         def.classList.add('hidden');
         const notFound = document.querySelector('#notFound');
         notFound.classList.remove('hidden');
-        const newEntry = document.querySelector('#new-entry');
-        newEntry.classList.remove('hidden');
     }
 }
 

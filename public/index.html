@@ -7,8 +7,15 @@
         <h1>Dictionary</h1>
         <form id="lookup">
             Enter a Word<br>
-            <input type="text" name="word" id="query-input-word"><br>
-            <input type="submit" value="Lookup Word">
+            <input type="text" name="word" id="query-input-word">
+            <select id="action">
+                <option>Lookup</option>
+                <option>Add</option>
+                <option>Update</option>
+                <option>Delete</option>
+            </select>
+            <br>
+            <input type="submit" value="Submit">
         </form>
         <div id="notFound" class="hidden">
             <p>Sorry, that word was not found.</p>
