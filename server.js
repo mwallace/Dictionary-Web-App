@@ -19,13 +19,17 @@ app.get('/:word', async (req, res) => {
 });
 
 // Path for providing a definition, given a word
-app.post('/:word', async (req, res) => {
+app.post('/upsert/:word', async (req, res) => {
     let data = '';
 	req.setEncoding('utf8');
 	req.on('data', (chunk) => {
 		data += chunk;
     });
     req.on('end', async () => {
+        if (data.length <= 0) {
+            res.send(null);
+            return;
+        }
         const body = JSON.parse(data);
         const word = body.word;
         const definition = body.definition;
